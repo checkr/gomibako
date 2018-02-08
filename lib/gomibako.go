@@ -13,6 +13,8 @@ import (
 	"github.com/Songmu/strrand"
 )
 
+const ttlInHours = 7 * 24
+
 type GomibakoKey string
 
 type GomibakoRequest struct {
@@ -187,7 +189,7 @@ func (gr *GomibakoRepository) Truncate() {
 	for gk, g := range gr.gomibakos {
 		d := time.Since(g.timestamp)
 
-		if d.Hours() > 1 {
+		if d.Hours() > ttlInHours {
 			log.Println("Deleting " + string(gk))
 			g.releaseChAll()
 			delete(gr.gomibakos, gk)
